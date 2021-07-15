@@ -4,8 +4,7 @@ import android.content.Context;
 
 public class PlayerEntity extends GameEntity {
 
-    private float gravity_force = 0.3f;
-    private float jump_force = -9999f;
+    private float jump_force = Const.MIN_FORCE;
     private boolean fly = false;
 
     public PlayerEntity(Context context) {
@@ -16,13 +15,13 @@ public class PlayerEntity extends GameEntity {
 
     public void fly() {
         if (fly) {
-            if (jump_force!=-9999) {
+            if (jump_force != Const.MIN_FORCE) {
                 image.setTranslationY(image.getTranslationY() - jump_force);
-                jump_force -= gravity_force;
+                jump_force -= Const.GRAVITY;
             }
             if (image.getTranslationY() >= 0) {
                 image.setTranslationY(0);
-                jump_force = -9999f;
+                jump_force = Const.MIN_FORCE;
                 fly = false;
             }
         }
@@ -31,7 +30,7 @@ public class PlayerEntity extends GameEntity {
     public void jump() {
         if (!fly) {
             fly = true;
-            jump_force = 17f;
+            jump_force = Const.JUMP_FORCE;
         }
     }
 

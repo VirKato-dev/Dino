@@ -46,8 +46,8 @@ public abstract class GameEntity {
 
     protected void setSize(int width, int height) {
         FrameLayout.LayoutParams flp = (FrameLayout.LayoutParams) image.getLayoutParams();
-        flp.width = (int)(width * dp);
-        flp.height = (int)(height * dp);
+        flp.width = (int) (width * dp);
+        flp.height = (int) (height * dp);
         image.setLayoutParams(flp);
     }
 

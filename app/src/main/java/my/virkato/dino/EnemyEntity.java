@@ -16,7 +16,7 @@ public class EnemyEntity extends GameEntity{
 
     public boolean move() {
         image.setTranslationX(image.getTranslationX() - speed);
-        if (image.getTranslationX()<-image.getLayoutParams().width) {
+        if (image.getTranslationX() < -image.getLayoutParams().width) {
             removeEntity();
         }
         return checkCollapse();
@@ -35,7 +35,6 @@ public class EnemyEntity extends GameEntity{
         if (image.getTranslationX() < playerW && image.getTranslationX() + thisW > 0) {
             return thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
                     image.getTranslationY() >= player.getTranslationY(); // collapse
-
         }
         return false;
     }
