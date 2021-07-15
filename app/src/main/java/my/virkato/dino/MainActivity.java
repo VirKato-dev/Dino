@@ -40,12 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    void createPlayer() {
-        player = new PlayerEntity(this);
-        player.setImage(R.drawable.idle);
-        player.addEntityTo(l_frame);
-    }
-
     void mainLoop() {
         loop = new TimerTask() {
             @Override
@@ -63,14 +57,18 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
-        timer.scheduleAtFixedRate(loop, 0, 10);
+        timer.scheduleAtFixedRate(loop, 0, Const.TIC);
+    }
+
+    void createPlayer() {
+        player = new PlayerEntity(this);
+        player.addEntityTo(l_frame);
     }
 
     void createEnemy() {
         entity = new EnemyEntity(this);
-        entity.setImage(R.drawable.fire);
-        entity.addEntityTo(l_frame);
         entity.setSpeed(5);
+        entity.addEntityTo(l_frame);
         delay = 300;
     }
 

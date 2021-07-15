@@ -12,6 +12,8 @@ public class EnemyEntity extends GameEntity{
         setSize(50,80);
         image.setTranslationX(context.getResources().getDisplayMetrics().widthPixels);
         image.setTranslationY(0 * dp);
+        type = EntityType.ENEMY;
+        setStyle(Const.ENEMY_NORMAL);
     }
 
     public boolean move() {
