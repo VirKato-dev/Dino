@@ -34,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
         mainLoop();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
+    }
+
     void createPlayer() {
         player = new PlayerEntity(this);
         player.setImage(R.drawable.idle);

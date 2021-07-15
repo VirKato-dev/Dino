@@ -10,7 +10,7 @@ public class PlayerEntity extends GameEntity {
 
     public PlayerEntity(Context context) {
         super(context);
-        setSize(100,100);
+        setSize(80,80);
         image.setTag("player");
     }
 
@@ -31,7 +31,7 @@ public class PlayerEntity extends GameEntity {
     public void jump() {
         if (!fly) {
             fly = true;
-            jump_force = 15f;
+            jump_force = 17f;
         }
     }
 
