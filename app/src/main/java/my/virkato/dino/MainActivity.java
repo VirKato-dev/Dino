@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     Timer timer = new Timer();
     TimerTask loop;
     PlayerEntity player;
+    EnemyEntity entity;
+    int delay = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         player.fly();
+                        addNewEntity();
+                        if (entity.move()) {
+                            System.out.println("break");
+                            timer.cancel();
+                        }
                     }
                 });
             }
@@ -53,4 +60,18 @@ public class MainActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(loop, 0, 10);
     }
 
+    void createEnemy() {
+        entity = new EnemyEntity(this);
+        entity.setImage(R.drawable.fire);
+        entity.addEntityTo(l_frame);
+        entity.setSpeed(5);
+        delay = 300;
+    }
+
+    void addNewEntity() {
+        if (delay < 0) {
+            createEnemy();
+        }
+        delay--;
+    }
 }

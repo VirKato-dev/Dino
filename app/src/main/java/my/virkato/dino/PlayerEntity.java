@@ -4,13 +4,14 @@ import android.content.Context;
 
 public class PlayerEntity extends GameEntity {
 
-    private float gravity_force = 0.9f;
+    private float gravity_force = 0.3f;
     private float jump_force = -9999f;
     private boolean fly = false;
 
     public PlayerEntity(Context context) {
         super(context);
         setSize(100,100);
+        image.setTag("player");
     }
 
     public void fly() {
@@ -30,7 +31,7 @@ public class PlayerEntity extends GameEntity {
     public void jump() {
         if (!fly) {
             fly = true;
-            jump_force = 25f;
+            jump_force = 15f;
         }
     }
 

@@ -12,11 +12,11 @@ public abstract class GameEntity {
     protected Context context;
     protected ImageView image;
     protected EntityType type;
-    protected ViewGroup vg;
+    protected ViewGroup frame;
     protected float dp;
 
 
-    public GameEntity(Context context) {
+    protected GameEntity(Context context) {
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics());
         this.context = context;
         image = new ImageView(context);
@@ -35,13 +35,13 @@ public abstract class GameEntity {
         this.type = type;
     }
 
-    protected void addEntityTo(ViewGroup vg) {
-        this.vg = vg;
-        vg.addView(image);
+    protected void addEntityTo(ViewGroup frame) {
+        this.frame = frame;
+        frame.addView(image);
     }
 
     protected void removeEntity() {
-        vg.removeView(image);
+        frame.removeView(image);
     }
 
     protected void setSize(int width, int height) {
