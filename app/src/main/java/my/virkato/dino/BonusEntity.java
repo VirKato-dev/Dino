@@ -3,17 +3,17 @@ package my.virkato.dino;
 import android.content.Context;
 import android.view.View;
 
-public class EnemyEntity extends GameEntity{
+public class BonusEntity extends GameEntity{
 
     private int speed = 1;
 
-    public EnemyEntity(Context context) {
+    public BonusEntity(Context context) {
         super(context);
-        setSize(50,80);
+        setSize(40,40);
         image.setTranslationX(context.getResources().getDisplayMetrics().widthPixels);
-        image.setTranslationY(0 * dp);
+        image.setTranslationY(-80 * dp);
         image.setTag(this);
-        setType(EntityType.ENEMY_NORMAL);
+        setType(EntityType.BONUS_NORMAL);
     }
 
     public boolean move() {
@@ -29,7 +29,7 @@ public class EnemyEntity extends GameEntity{
     }
 
     boolean checkCollapse() {
-        View player = (View) frame.findViewWithTag("player"); // ищем картинку игрока
+        View player = (View) frame.findViewWithTag("player"); // ищем картинку игрока (от всего один)
         int playerH = player.getLayoutParams().height;
         int playerW = player.getLayoutParams().width;
         int thisH = image.getLayoutParams().height;

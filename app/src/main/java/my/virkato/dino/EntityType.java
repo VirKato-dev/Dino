@@ -1,16 +1,16 @@
 package my.virkato.dino;
 
 public enum EntityType {
-    PLAYER(new int[] {R.drawable.idle}),
-    PLAYER_NORMAL(new int[] {R.drawable.idle, R.drawable.idle2}),
-    ENEMY(new int[] {R.drawable.fire}),
-    ENEMY_NORMAL(new int[] {R.drawable.fire}),
-    BONUS(new int[] {});
+    PLAYER_NORMAL(10, new int[] {R.drawable.idle, R.drawable.idle2}),
+    ENEMY_NORMAL(10000, new int[] {R.drawable.fire}), // если кадр всего один, то и обновлять его не нужно
+    BONUS_NORMAL(10000, new int[] {R.drawable.bonus});
 
     int[] id;
+    int delay;
 
-    EntityType(int[] id) {
+    EntityType(int delay, int[] id) {
         this.id = id;
+        this.delay = delay;
     }
 
     int getPhases() {

@@ -15,6 +15,7 @@ public abstract class GameEntity {
     protected ViewGroup frame;
     protected EntityType type;
     protected int phase;
+    protected int phase_delay;
 
     protected GameEntity(Context context) {
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics());
@@ -30,17 +31,27 @@ public abstract class GameEntity {
 
     protected void setType(EntityType type) {
         this.type = type;
-        applyType();
+        if (type.getPhases() > 0) { // на случай, если нет ни одного кадра анимации
+            int res = type.id[0];
+            image.setImageResource(res);
+            nextPhase();
+        }
     }
 
     protected void applyType() {
-        int res = type.id[phase];
-        image.setImageResource(res);
-        nextPhase();
+        if (type.getPhases() > 1) { // не листаем кадры, если он всего 1
+            int res = type.id[phase];
+            image.setImageResource(res);
+            nextPhase();
+        }
     }
 
     protected void nextPhase() {
-        phase = ++phase % type.getPhases();
+        phase_delay--;
+        if (phase_delay < 0) {
+            this.phase_delay = type.delay;
+            phase = ++phase % type.getPhases();
+        }
     }
 
     protected void addEntityTo(ViewGroup frame) {

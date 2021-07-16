@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -15,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     Timer timer = new Timer();
     TimerTask loop;
     PlayerEntity player;
-    EnemyEntity entity;
     int delay = -1;
 
     @Override
@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
 
                         player.fly(); // управление полётом
-                        player.applyType(); // смена картинки анимации
+                        player.applyType(); // смена картинки анимации игрока
 
-                        addNewEntity();
+                        addNewEntity(); // ставим нового противника на конвейер
 
                         int n = l_frame.getChildCount();
                         for (int i = n-1; i > 0; i--) {
@@ -59,10 +59,17 @@ public class MainActivity extends AppCompatActivity {
                             Object tag = view.getTag();
                             if (tag != null) {
                                 if (tag instanceof EnemyEntity) { // нужны толькко теги врагов
-                                    ((EnemyEntity) view.getTag()).applyType(); // смена картинки анимации
+                                    ((EnemyEntity) view.getTag()).applyType(); // смена картинки анимации врага
                                     if (((EnemyEntity) view.getTag()).move()) {
                                         System.out.println("break");
                                         timer.cancel();
+                                        break;
+                                    }
+                                }
+                                if (tag instanceof BonusEntity) { // нужны толькко теги врагов
+                                    ((BonusEntity) view.getTag()).applyType(); // смена картинки анимации врага
+                                    if (((BonusEntity) view.getTag()).move()) {
+                                        System.out.println("catch");
                                         break;
                                     }
                                 }
@@ -82,9 +89,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void createEnemy() {
-        entity = new EnemyEntity(this);
-        entity.setSpeed(5);
-        entity.addEntityTo(l_frame);
+        Random random = new Random();
+        if (random.nextBoolean()) { // орёл или решка )
+            EnemyEntity enemy;
+            enemy = new EnemyEntity(this);
+            enemy.setSpeed(5);
+            enemy.addEntityTo(l_frame);
+        } else {
+            BonusEntity bonus;
+            bonus = new BonusEntity(this);
+            bonus.setSpeed(5);
+            bonus.addEntityTo(l_frame);
+        }
         delay = 200;
     }
 
