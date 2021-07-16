@@ -12,9 +12,9 @@ public abstract class GameEntity {
     protected Context context;
     protected float dp;
     protected ImageView image;
-    protected EntityType type;
     protected ViewGroup frame;
-    protected int style;
+    protected EntityType type;
+    protected int phase;
 
     protected GameEntity(Context context) {
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics());
@@ -25,24 +25,22 @@ public abstract class GameEntity {
         FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         flp.gravity = Gravity.BOTTOM | Gravity.START;
         image.setLayoutParams(flp);
-    }
-
-    protected void setStyle(int style) {
-        this.style = style;
-        int res = R.drawable.ic_launcher_foreground;
-        switch (style) {
-            case Const.PLAYER_NORMAL:
-                res = R.drawable.idle;
-                break;
-            case Const.ENEMY_NORMAL:
-                res = R.drawable.fire;
-                break;
-        }
-        image.setImageResource(res);
+        phase = 0;
     }
 
     protected void setType(EntityType type) {
         this.type = type;
+        applyType();
+    }
+
+    protected void applyType() {
+        int res = type.id[phase];
+        image.setImageResource(res);
+        nextPhase();
+    }
+
+    protected void nextPhase() {
+        phase = ++phase % type.getPhases();
     }
 
     protected void addEntityTo(ViewGroup frame) {

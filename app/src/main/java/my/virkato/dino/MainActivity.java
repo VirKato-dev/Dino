@@ -47,12 +47,28 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        player.fly();
+
+                        player.fly(); // управление полётом
+                        player.applyType(); // смена картинки анимации
+
                         addNewEntity();
-                        if (entity.move()) {
-                            System.out.println("break");
-                            timer.cancel();
+
+                        int n = l_frame.getChildCount();
+                        for (int i = n-1; i > 0; i--) {
+                            View view = l_frame.getChildAt(i);
+                            Object tag = view.getTag();
+                            if (tag != null) {
+                                if (tag instanceof EnemyEntity) { // нужны толькко теги врагов
+                                    ((EnemyEntity) view.getTag()).applyType(); // смена картинки анимации
+                                    if (((EnemyEntity) view.getTag()).move()) {
+                                        System.out.println("break");
+                                        timer.cancel();
+                                        break;
+                                    }
+                                }
+                            }
                         }
+
                     }
                 });
             }
@@ -69,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         entity = new EnemyEntity(this);
         entity.setSpeed(5);
         entity.addEntityTo(l_frame);
-        delay = 300;
+        delay = 200;
     }
 
     void addNewEntity() {

@@ -11,8 +11,7 @@ public class PlayerEntity extends GameEntity {
         super(context);
         setSize(80,80);
         image.setTag("player");
-        type = EntityType.PLAYER;
-        setStyle(Const.PLAYER_NORMAL);
+        setType(EntityType.PLAYER_NORMAL);
     }
 
     public void fly() {
