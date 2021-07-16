@@ -59,17 +59,21 @@ public class MainActivity extends AppCompatActivity {
                             Object tag = view.getTag();
                             if (tag != null) {
                                 if (tag instanceof EnemyEntity) { // нужны толькко теги врагов
-                                    ((EnemyEntity) view.getTag()).applyType(); // смена картинки анимации врага
-                                    if (((EnemyEntity) view.getTag()).move()) {
+                                    EnemyEntity enemy = ((EnemyEntity) tag);
+                                    enemy.applyType(); // смена картинки анимации врага
+                                    if (enemy.move()) {
                                         System.out.println("break");
                                         timer.cancel();
                                         break;
                                     }
                                 }
                                 if (tag instanceof BonusEntity) { // нужны толькко теги врагов
-                                    ((BonusEntity) view.getTag()).applyType(); // смена картинки анимации врага
-                                    if (((BonusEntity) view.getTag()).move()) {
+                                    BonusEntity bonus = ((BonusEntity) tag);
+                                    bonus.applyType(); // смена картинки анимации врага
+                                    if (bonus.move()) {
                                         System.out.println("catch");
+                                        bonus.removeEntity();
+                                        bonus.playSound();
                                         break;
                                     }
                                 }

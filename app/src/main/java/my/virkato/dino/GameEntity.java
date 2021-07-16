@@ -1,6 +1,10 @@
 package my.virkato.dino;
 
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -17,6 +21,13 @@ public abstract class GameEntity {
     protected int phase;
     protected int phase_delay;
 
+    protected static int COIN;
+    protected static int JUMP;
+    protected static SoundPool soundPool;
+    protected static AudioManager audioManager;
+    protected static int STREAM_MUSIC = AudioManager.STREAM_MUSIC;
+    protected int streamId;
+
     protected GameEntity(Context context) {
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics());
         this.context = context;
@@ -27,6 +38,29 @@ public abstract class GameEntity {
         flp.gravity = Gravity.BOTTOM | Gravity.START;
         image.setLayoutParams(flp);
         phase = 0;
+
+        initAudio();
+    }
+
+    void initAudio() {
+        if (soundPool == null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_GAME)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build();
+                soundPool = new SoundPool.Builder()
+                        .setMaxStreams(8)
+                        .setAudioAttributes(audioAttributes).build();
+            } else {
+                soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
+            }
+
+            COIN = soundPool.load(context, R.raw.coin, 0);
+            JUMP = soundPool.load(context, R.raw.jump, 0);
+
+            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        }
     }
 
     protected void setType(EntityType type) {
@@ -70,4 +104,6 @@ public abstract class GameEntity {
         image.setLayoutParams(flp);
     }
 
+    protected void playSound() {
+    }
 }

@@ -10,7 +10,7 @@ public enum EntityType {
 
     EntityType(int delay, int[] id) {
         this.id = id;
-        this.delay = delay;
+        this.delay = delay; // количество тиков задержки анимации
     }
 
     int getPhases() {

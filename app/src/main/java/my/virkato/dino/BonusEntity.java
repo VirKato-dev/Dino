@@ -29,7 +29,7 @@ public class BonusEntity extends GameEntity{
     }
 
     boolean checkCollapse() {
-        View player = (View) frame.findViewWithTag("player"); // ищем картинку игрока (от всего один)
+        View player = (View) frame.findViewWithTag("player"); // ищем картинку игрока (он всего один)
         int playerH = player.getLayoutParams().height;
         int playerW = player.getLayoutParams().width;
         int thisH = image.getLayoutParams().height;
@@ -39,5 +39,17 @@ public class BonusEntity extends GameEntity{
                     image.getTranslationY() >= player.getTranslationY(); // столкновение
         }
         return false;
+    }
+
+    @Override
+    protected void playSound() {
+        float curVolume = audioManager.getStreamVolume(STREAM_MUSIC);
+        float maxVolume = audioManager.getStreamMaxVolume(STREAM_MUSIC);
+        float leftVolume = curVolume / maxVolume;
+        float rightVolume = curVolume / maxVolume;
+        int priority = 1;
+        int no_loop = 0;
+        float normal_playback_rate = 1f;
+        streamId = soundPool.play(COIN, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
     }
 }
