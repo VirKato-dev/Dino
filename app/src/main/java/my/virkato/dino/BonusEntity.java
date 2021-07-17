@@ -5,9 +5,6 @@ import android.view.View;
 
 public class BonusEntity extends GameEntity {
 
-    private int speed = 1;
-
-
     public BonusEntity(Context context) {
         super(context);
         setSize(40, 40);
@@ -19,10 +16,6 @@ public class BonusEntity extends GameEntity {
 
     protected void removeEntity() {
         super.removeEntity();
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
     }
 
     @Override

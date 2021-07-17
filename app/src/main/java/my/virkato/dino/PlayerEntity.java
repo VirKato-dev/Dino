@@ -15,7 +15,7 @@ public class PlayerEntity extends GameEntity {
     }
 
     @Override
-    public void move(int speed) { // собственная реализация движения (не по конвейеру)
+    public void move() { // собственная реализация движения (не по конвейеру)
         if (fly) {
             if (jump_force != Const.MIN_FORCE) {
                 image.setTranslationY(image.getTranslationY() - jump_force);

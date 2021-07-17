@@ -41,15 +41,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        event = new OnEvent() {
+        event = new OnEvent() { // создаём проводок
             @Override
             public void action(ImageView img, Events event) {
                 System.out.println(event.name());
                 if (event == Events.COIN_CATCH) {
-                    ((GameEntity)img.getTag()).playSound(GameEntity.COIN);
+                    GameEntity entity = (GameEntity)img.getTag();
+                    entity.playSound(GameEntity.COIN);
+                    entity.removeEntity();
                     score += 10;
                     t_score.setText(String.valueOf(score));
-                    ((GameEntity)img.getTag()).removeEntity();
                 }
             }
         };
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (tag instanceof GameEntity) { // нужны только теги игровых персонажей
                                     entity = ((GameEntity) tag);
                                     entity.applyType(); // смена картинки анимации
-                                    entity.move(1); // передвигаем
+                                    entity.move(); // передвигаем
                                 } else if (tag instanceof String && tag.equals("player")) {
                                     entity = player;
                                 } else {
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 if (entity != null) {
                                     entity.applyType(); // смена картинки анимации
-                                    entity.move(1); // передвигаем
+                                    entity.move(); // передвигаем
                                 }
                             }
                         }
@@ -120,15 +121,15 @@ public class MainActivity extends AppCompatActivity {
         if (random.nextBoolean()) { // орёл или решка )
             EnemyEntity enemy;
             enemy = new EnemyEntity(this);
-            enemy.setSpeed(5);
+            enemy.setSpeed(3);
             enemy.addEntityTo(l_frame);
-            enemy.setOnEventListener(event);
+            enemy.setOnEventListener(event); // подключаем проводок
         } else {
             BonusEntity bonus;
             bonus = new BonusEntity(this);
-            bonus.setSpeed(5);
+            bonus.setSpeed(3);
             bonus.addEntityTo(l_frame);
-            bonus.setOnEventListener(event);
+            bonus.setOnEventListener(event); // подключаем проводок
         }
         delay = 200;
     }

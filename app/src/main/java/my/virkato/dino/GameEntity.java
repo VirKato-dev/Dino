@@ -21,6 +21,7 @@ public abstract class GameEntity {
     protected EntityType type;
     protected int phase;
     protected int phase_delay;
+    private int speed = 1;
 
     // для звука
     protected static int COIN;
@@ -103,7 +104,7 @@ public abstract class GameEntity {
         frame.addView(image);
     }
 
-    protected void removeEntity() {
+    protected void removeEntity() { // удаляем картинку, и вместе с ней ссылку на объект (в теге)
         frame.removeView(image);
     }
 
@@ -112,6 +113,10 @@ public abstract class GameEntity {
         flp.width = (int) (width * dp);
         flp.height = (int) (height * dp);
         image.setLayoutParams(flp);
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     protected void playSound(int soundId) {
@@ -125,7 +130,7 @@ public abstract class GameEntity {
         streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
     }
 
-    protected void move(int speed) {
+    protected void move() {
         image.setTranslationX(image.getTranslationX() - speed);
         if (image.getTranslationX() < -image.getLayoutParams().width) {
             removeEntity();
@@ -143,7 +148,7 @@ public abstract class GameEntity {
             if (image.getTranslationX() < playerW && image.getTranslationX() + thisW > 0) {
                 if (thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
                         image.getTranslationY() >= player.getTranslationY()) { // столкновение
-                    onEvent.action(image, collapsed()); // результат проверки столкновения отправим приёмнику
+                    onEvent.action(image, collapsed()); // результат проверки столкновения передаём по проводку приёмнику
                 }
             }
         }
