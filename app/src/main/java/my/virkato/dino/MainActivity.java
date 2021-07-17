@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        event = new OnEvent() { // создаём проводок
+        event = new OnEvent() { // действие по сигналу пришедшему по проводку
             @Override
             public void action(ImageView img, Events event) {
-                // главный цикл игры определяет последствия соприкосновений
+                // каждый (подключенный через проводок) объект присылает сигнал
                 GameEntity entity = (GameEntity)img.getTag();
                 if (event == Events.COIN_CATCH) {
                     entity.playSound(GameEntity.COIN);
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        // отвечает за добавление врагов на конвейер, их движение и подсчёт очков
                         score_delay--;
                         if (score_delay < 0) {
                             score += 1;
@@ -91,16 +91,13 @@ public class MainActivity extends AppCompatActivity {
                             Object tag = view.getTag();
                             GameEntity entity;
                             if (tag != null) {
+                                // в окне могут быть и другие объекты
                                 if (tag instanceof GameEntity) { // нужны только теги игровых персонажей
-                                    entity = ((GameEntity) tag);
+                                    entity = (GameEntity) tag;
                                     entity.applyType(); // смена картинки анимации
-                                    entity.move(); // передвигаем
+                                    entity.move(); // передвигаем (у игрока своя реализация движения)
                                 } else if (tag instanceof String && tag.equals("player")) {
                                     entity = player;
-                                } else {
-                                    entity = null;
-                                }
-                                if (entity != null) {
                                     entity.applyType(); // смена картинки анимации
                                     entity.move(); // передвигаем
                                 }
@@ -122,20 +119,20 @@ public class MainActivity extends AppCompatActivity {
     void createEnemy() {
         // объектов столкновения много и храним их в теге картинки
         Random random = new Random();
-        if (random.nextBoolean()) { // орёл или решка )
+        if (random.nextBoolean()) { // орёл или решка - всего 2 объекта пока)
             EnemyEntity enemy;
             enemy = new EnemyEntity(this);
-            enemy.setSpeed(3);
+            enemy.setSpeed(5);
             enemy.addEntityTo(l_frame);
-            enemy.setOnEventListener(event); // подключаем проводок
+            enemy.setOnEventListener(event); // подключаем проводок к этому объекту
         } else {
             BonusEntity bonus;
             bonus = new BonusEntity(this);
-            bonus.setSpeed(3);
+            bonus.setSpeed(5);
             bonus.addEntityTo(l_frame);
-            bonus.setOnEventListener(event); // подключаем проводок
+            bonus.setOnEventListener(event); // подключаем проводок к этому объекту
         }
-        delay = 200;
+        delay = 200; // позже усложнить
     }
 
     void addNewEntity() {
