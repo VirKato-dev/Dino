@@ -118,13 +118,15 @@ public abstract class GameEntity {
 
     protected boolean checkCollapse(String tag) {
         View player = (View) frame.findViewWithTag(tag); // ищем картинку игрока (он всего один)
-        int playerH = player.getLayoutParams().height;
-        int playerW = player.getLayoutParams().width;
-        int thisH = image.getLayoutParams().height;
-        int thisW = image.getLayoutParams().width;
-        if (image.getTranslationX() < playerW && image.getTranslationX() + thisW > 0) {
-            return thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
-                    image.getTranslationY() >= player.getTranslationY(); // столкновение
+        if (player != null) { // вдруг игрок удалён с экрана
+            int playerH = player.getLayoutParams().height;
+            int playerW = player.getLayoutParams().width;
+            int thisH = image.getLayoutParams().height;
+            int thisW = image.getLayoutParams().width;
+            if (image.getTranslationX() < playerW && image.getTranslationX() + thisW > 0) {
+                return thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
+                        image.getTranslationY() >= player.getTranslationY(); // столкновение
+            }
         }
         return false;
     }

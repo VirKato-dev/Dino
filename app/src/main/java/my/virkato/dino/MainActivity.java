@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
                                     enemy.applyType(); // смена картинки анимации врага
                                     if (enemy.move()) {
                                         System.out.println("break");
-                                        timer.cancel();
+                                        timer.cancel(); // сначала исключаем проверки на столкновения
+                                        player.removeEntity(); // потом удаляем игрока с экрана
                                         break;
                                     }
                                 }
