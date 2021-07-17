@@ -2,7 +2,6 @@
 Dino Google
 
 Java Android Studio project for inject to Sketchware project
-
 Concept only (right now)
 
 
