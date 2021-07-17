@@ -55,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        player.fly(); // управление полётом
-                        player.applyType(); // смена картинки анимации игрока
+                        if (player != null) {
+                            player.fly(); // управление полётом
+                            player.applyType(); // смена картинки анимации игрока
+                        }
 
                         addNewEntity(); // ставим нового противника на конвейер
 
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                             View view = l_frame.getChildAt(i);
                             Object tag = view.getTag();
                             if (tag != null) {
-                                if (tag instanceof EnemyEntity) { // нужны толькко теги врагов
+                                if (tag instanceof EnemyEntity) { // нужны только теги врагов
                                     EnemyEntity enemy = ((EnemyEntity) tag);
                                     enemy.applyType(); // смена картинки анимации врага
                                     if (enemy.move()) {
