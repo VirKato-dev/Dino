@@ -29,6 +29,8 @@ public abstract class GameEntity {
     protected static AudioManager audioManager;
     protected int streamId;
 
+    protected OnEvent onEvent;
+
 
     protected GameEntity(Context context) {
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics());
@@ -42,6 +44,10 @@ public abstract class GameEntity {
         phase = 0;
 
         initAudio();
+    }
+
+    protected void setOnEventListener(OnEvent event) {
+        onEvent = event;
     }
 
     void initAudio() {
@@ -119,7 +125,15 @@ public abstract class GameEntity {
         streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
     }
 
-    protected boolean checkCollapse(String tag) {
+    protected void move(int speed) {
+        image.setTranslationX(image.getTranslationX() - speed);
+        if (image.getTranslationX() < -image.getLayoutParams().width) {
+            removeEntity();
+        }
+        checkCollapse("player");
+    }
+
+    protected void checkCollapse(String tag) {
         View player = (View) frame.findViewWithTag(tag); // ищем картинку игрока (он всего один)
         if (player != null) { // вдруг игрок удалён с экрана
             int playerH = player.getLayoutParams().height;
@@ -127,11 +141,16 @@ public abstract class GameEntity {
             int thisH = image.getLayoutParams().height;
             int thisW = image.getLayoutParams().width;
             if (image.getTranslationX() < playerW && image.getTranslationX() + thisW > 0) {
-                return thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
-                        image.getTranslationY() >= player.getTranslationY(); // столкновение
+                if (thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
+                        image.getTranslationY() >= player.getTranslationY()) { // столкновение
+                    onEvent.action(image, collapsed()); // результат проверки столкновения отправим приёмнику
+                }
             }
         }
-        return false;
+    }
+
+    protected Events collapsed() {
+        return null;
     }
 
 }

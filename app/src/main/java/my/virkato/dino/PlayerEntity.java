@@ -14,7 +14,8 @@ public class PlayerEntity extends GameEntity {
         setType(EntityType.PLAYER_NORMAL);
     }
 
-    public void fly() {
+    @Override
+    public void move(int speed) { // собственная реализация движения (не по конвейеру)
         if (fly) {
             if (jump_force != Const.MIN_FORCE) {
                 image.setTranslationY(image.getTranslationY() - jump_force);

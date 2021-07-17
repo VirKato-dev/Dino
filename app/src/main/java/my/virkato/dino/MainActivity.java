@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     long score = 0;
     int score_delay = 0;
 
+    OnEvent event;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,20 @@ public class MainActivity extends AppCompatActivity {
                 if (player != null) player.jump();
             }
         });
+
+        event = new OnEvent() {
+            @Override
+            public void action(ImageView img, Events event) {
+                System.out.println(event.name());
+                if (event == Events.COIN_CATCH) {
+                    ((GameEntity)img.getTag()).playSound(GameEntity.COIN);
+                    score += 10;
+                    t_score.setText(String.valueOf(score));
+                    ((GameEntity)img.getTag()).removeEntity();
+                }
+            }
+        };
+
         createPlayer();
         mainLoop();
     }
@@ -55,51 +72,35 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        if (player != null) {
-                            player.fly(); // управление полётом
-                            player.applyType(); // смена картинки анимации игрока
-                        }
-
-                        addNewEntity(); // ставим нового противника на конвейер
-
                         score_delay--;
                         if (score_delay < 0) {
+                            score += 1;
+                            t_score.setText(String.valueOf(score));
                             score_delay = Const.SCORE_DELAY;
-                            score += 1; // очки за шаги
                         }
+                        addNewEntity(); // ставим нового противника на конвейер
 
                         int n = l_frame.getChildCount();
-                        for (int i = n-1; i > 0; i--) {
+                        for (int i = n - 1; i > 0; i--) {
                             View view = l_frame.getChildAt(i);
                             Object tag = view.getTag();
+                            GameEntity entity;
                             if (tag != null) {
-                                if (tag instanceof EnemyEntity) { // нужны только теги врагов
-                                    EnemyEntity enemy = ((EnemyEntity) tag);
-                                    enemy.applyType(); // смена картинки анимации врага
-                                    if (enemy.move()) {
-                                        System.out.println("break");
-                                        timer.cancel(); // сначала исключаем проверки на столкновения
-                                        player.removeEntity(); // потом удаляем игрока с экрана
-                                        player = null;
-                                        break;
-                                    }
+                                if (tag instanceof GameEntity) { // нужны только теги игровых персонажей
+                                    entity = ((GameEntity) tag);
+                                    entity.applyType(); // смена картинки анимации
+                                    entity.move(1); // передвигаем
+                                } else if (tag instanceof String && tag.equals("player")) {
+                                    entity = player;
+                                } else {
+                                    entity = null;
                                 }
-                                if (tag instanceof BonusEntity) { // нужны толькко теги врагов
-                                    BonusEntity bonus = ((BonusEntity) tag);
-                                    bonus.applyType(); // смена картинки анимации врага
-                                    if (bonus.move()) {
-                                        System.out.println("catch");
-                                        bonus.removeEntity();
-                                        bonus.playSound(GameEntity.COIN);
-                                        score += 10; // очки за бонус
-                                        break;
-                                    }
+                                if (entity != null) {
+                                    entity.applyType(); // смена картинки анимации
+                                    entity.move(1); // передвигаем
                                 }
                             }
                         }
-
-                        t_score.setText(String.valueOf(score));
-
                     }
                 });
             }
@@ -121,11 +122,13 @@ public class MainActivity extends AppCompatActivity {
             enemy = new EnemyEntity(this);
             enemy.setSpeed(5);
             enemy.addEntityTo(l_frame);
+            enemy.setOnEventListener(event);
         } else {
             BonusEntity bonus;
             bonus = new BonusEntity(this);
             bonus.setSpeed(5);
             bonus.addEntityTo(l_frame);
+            bonus.setOnEventListener(event);
         }
         delay = 200;
     }
