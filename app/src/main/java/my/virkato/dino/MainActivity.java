@@ -44,13 +44,17 @@ public class MainActivity extends AppCompatActivity {
         event = new OnEvent() { // создаём проводок
             @Override
             public void action(ImageView img, Events event) {
-                System.out.println(event.name());
+                // главный цикл игры определяет последствия соприкосновений
+                GameEntity entity = (GameEntity)img.getTag();
                 if (event == Events.COIN_CATCH) {
-                    GameEntity entity = (GameEntity)img.getTag();
                     entity.playSound(GameEntity.COIN);
                     entity.removeEntity();
                     score += 10;
                     t_score.setText(String.valueOf(score));
+                }
+                if (event == Events.ENEMY_COLLAPSE) {
+                    player.removeEntity();
+                    timer.cancel(); // прекращаем главный цикл игры
                 }
             }
         };
