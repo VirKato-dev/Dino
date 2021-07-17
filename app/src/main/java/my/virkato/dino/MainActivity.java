@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         event = new OnEvent() { // действие по сигналу пришедшему по проводку
+            // не объект решает, что будет происходить в игре при столкновении с ним
             @Override
             public void action(ImageView img, Events event) {
                 // каждый (подключенный через проводок) объект присылает сигнал
