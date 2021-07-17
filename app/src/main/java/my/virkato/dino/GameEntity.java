@@ -22,12 +22,13 @@ public abstract class GameEntity {
     protected int phase;
     protected int phase_delay;
 
+    // для звука
     protected static int COIN;
     protected static int JUMP;
     protected static SoundPool soundPool;
     protected static AudioManager audioManager;
-    protected static int STREAM_MUSIC = AudioManager.STREAM_MUSIC;
     protected int streamId;
+
 
     protected GameEntity(Context context) {
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics());
@@ -44,19 +45,21 @@ public abstract class GameEntity {
     }
 
     void initAudio() {
-        if (soundPool == null) {
+        if (soundPool == null) { // один раз для всего приложения
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_GAME)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .build();
                 soundPool = new SoundPool.Builder()
-                        .setMaxStreams(8)
-                        .setAudioAttributes(audioAttributes).build();
+                        .setMaxStreams(4)
+                        .setAudioAttributes(audioAttributes)
+                        .build();
             } else {
                 soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
             }
 
+            // Не стоит ждать окончания загрузки
             COIN = soundPool.load(context, R.raw.coin, 0);
             JUMP = soundPool.load(context, R.raw.jump, 0);
 
@@ -66,7 +69,7 @@ public abstract class GameEntity {
 
     protected void setType(EntityType type) {
         this.type = type;
-        if (type.getPhases() > 0) { // на случай, если нет ни одного кадра анимации
+        if (type.getPhaseCount() > 0) { // на случай, если нет ни одного кадра анимации
             int res = type.id[0];
             image.setImageResource(res);
             nextPhase();
@@ -74,7 +77,7 @@ public abstract class GameEntity {
     }
 
     protected void applyType() {
-        if (type.getPhases() > 1) { // не листаем кадры, если он всего 1
+        if (type.getPhaseCount() > 1) { // не листаем кадры, если он всего 1
             int res = type.id[phase];
             image.setImageResource(res);
             nextPhase();
@@ -85,7 +88,7 @@ public abstract class GameEntity {
         phase_delay--;
         if (phase_delay < 0) {
             this.phase_delay = type.delay;
-            phase = ++phase % type.getPhases();
+            phase = ++phase % type.getPhaseCount(); // [0...phase_count)
         }
     }
 
@@ -106,11 +109,11 @@ public abstract class GameEntity {
     }
 
     protected void playSound(int soundId) {
-        float curVolume = audioManager.getStreamVolume(STREAM_MUSIC);
-        float maxVolume = audioManager.getStreamMaxVolume(STREAM_MUSIC);
+        float curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        float maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         float leftVolume = curVolume / maxVolume;
         float rightVolume = curVolume / maxVolume;
-        int priority = 1;
+        int priority = 0;
         int no_loop = 0;
         float normal_playback_rate = 1f;
         streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);

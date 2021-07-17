@@ -13,7 +13,7 @@ public enum EntityType {
         this.delay = delay; // количество тиков задержки анимации
     }
 
-    int getPhases() {
+    int getPhaseCount() {
         return id.length;
     }
 }
