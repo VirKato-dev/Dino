@@ -1,9 +1,10 @@
 # Dino
 Dino Google
-
+---
 Java Android Studio project for inject to Sketchware project
-Concept only (right now)
 
+Concept only (right now)
+---
 
 MainActivity - main loop
 
