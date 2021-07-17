@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                     if (bonus.move()) {
                                         System.out.println("catch");
                                         bonus.removeEntity();
-                                        bonus.playSound();
+                                        bonus.playSound(GameEntity.COIN);
                                         break;
                                     }
                                 }
@@ -88,11 +88,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void createPlayer() {
+        // игрок всего один, поэтому храним его в отдельной переменной
         player = new PlayerEntity(this);
         player.addEntityTo(l_frame);
     }
 
     void createEnemy() {
+        // объектов столкновения много и храним их в теге картинки
         Random random = new Random();
         if (random.nextBoolean()) { // орёл или решка )
             EnemyEntity enemy;

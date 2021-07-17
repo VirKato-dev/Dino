@@ -32,20 +32,8 @@ public class PlayerEntity extends GameEntity {
         if (!fly) {
             fly = true;
             jump_force = Const.JUMP_FORCE;
-            playSound();
+            playSound(JUMP);
         }
-    }
-
-    @Override
-    protected void playSound() {
-        float curVolume = audioManager.getStreamVolume(STREAM_MUSIC);
-        float maxVolume = audioManager.getStreamMaxVolume(STREAM_MUSIC);
-        float leftVolume = curVolume / maxVolume;
-        float rightVolume = curVolume / maxVolume;
-        int priority = 1;
-        int no_loop = 0;
-        float normal_playback_rate = 1f;
-        streamId = soundPool.play(JUMP, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
     }
 
 }

@@ -7,6 +7,7 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -104,6 +105,28 @@ public abstract class GameEntity {
         image.setLayoutParams(flp);
     }
 
-    protected void playSound() {
+    protected void playSound(int soundId) {
+        float curVolume = audioManager.getStreamVolume(STREAM_MUSIC);
+        float maxVolume = audioManager.getStreamMaxVolume(STREAM_MUSIC);
+        float leftVolume = curVolume / maxVolume;
+        float rightVolume = curVolume / maxVolume;
+        int priority = 1;
+        int no_loop = 0;
+        float normal_playback_rate = 1f;
+        streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
     }
+
+    protected boolean checkCollapse(String tag) {
+        View player = (View) frame.findViewWithTag(tag); // ищем картинку игрока (он всего один)
+        int playerH = player.getLayoutParams().height;
+        int playerW = player.getLayoutParams().width;
+        int thisH = image.getLayoutParams().height;
+        int thisW = image.getLayoutParams().width;
+        if (image.getTranslationX() < playerW && image.getTranslationX() + thisW > 0) {
+            return thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
+                    image.getTranslationY() >= player.getTranslationY(); // столкновение
+        }
+        return false;
+    }
+
 }

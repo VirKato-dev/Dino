@@ -21,23 +21,11 @@ public class EnemyEntity extends GameEntity{
         if (image.getTranslationX() < -image.getLayoutParams().width) {
             removeEntity();
         }
-        return checkCollapse();
+        return checkCollapse("player");
     }
 
     public void setSpeed(int speed) {
         this.speed = speed;
     }
 
-    boolean checkCollapse() {
-        View player = (View) frame.findViewWithTag("player"); // ищем картинку игрока
-        int playerH = player.getLayoutParams().height;
-        int playerW = player.getLayoutParams().width;
-        int thisH = image.getLayoutParams().height;
-        int thisW = image.getLayoutParams().width;
-        if (image.getTranslationX() < playerW && image.getTranslationX() + thisW > 0) {
-            return thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
-                    image.getTranslationY() >= player.getTranslationY(); // столкновение
-        }
-        return false;
-    }
 }
