@@ -11,7 +11,7 @@ public class BonusEntity extends GameEntity{
         super(context);
         setSize(40,40);
         image.setTranslationX(context.getResources().getDisplayMetrics().widthPixels);
-        image.setTranslationY(-80 * dp);
+        image.setTranslationY(-120 * dp);
         image.setTag(this);
         setType(EntityType.BONUS_NORMAL);
     }

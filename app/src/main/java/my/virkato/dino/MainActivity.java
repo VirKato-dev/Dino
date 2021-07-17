@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import java.util.Random;
 import java.util.Timer;
@@ -18,16 +19,22 @@ public class MainActivity extends AppCompatActivity {
     PlayerEntity player;
     int delay = -1;
 
+    TextView t_score;
+    long score = 0;
+    int score_delay = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        t_score = findViewById(R.id.t_score);
+
         l_frame = findViewById(R.id.l_frame);
         l_frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                player.jump();
+                if (player != null) player.jump();
             }
         });
         createPlayer();
@@ -53,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
                         addNewEntity(); // ставим нового противника на конвейер
 
+                        score_delay--;
+                        if (score_delay < 0) {
+                            score_delay = Const.SCORE_DELAY;
+                            score += 1; // очки за шаги
+                        }
+
                         int n = l_frame.getChildCount();
                         for (int i = n-1; i > 0; i--) {
                             View view = l_frame.getChildAt(i);
@@ -65,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                                         System.out.println("break");
                                         timer.cancel(); // сначала исключаем проверки на столкновения
                                         player.removeEntity(); // потом удаляем игрока с экрана
+                                        player = null;
                                         break;
                                     }
                                 }
@@ -75,11 +89,14 @@ public class MainActivity extends AppCompatActivity {
                                         System.out.println("catch");
                                         bonus.removeEntity();
                                         bonus.playSound(GameEntity.COIN);
+                                        score += 10; // очки за бонус
                                         break;
                                     }
                                 }
                             }
                         }
+
+                        t_score.setText(String.valueOf(score));
 
                     }
                 });

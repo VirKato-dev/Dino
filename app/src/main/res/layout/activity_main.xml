@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/t_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -28,7 +28,7 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/t_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="frame" />
@@ -41,7 +41,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/t_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
