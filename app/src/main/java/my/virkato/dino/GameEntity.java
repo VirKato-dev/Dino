@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 public abstract class GameEntity {
 
     protected Context context;
@@ -47,6 +49,10 @@ public abstract class GameEntity {
         initAudio();
     }
 
+    /**
+     * подключить проводок к этому объекту
+     * @param event обработчик в главном коде (MainActivity)
+     */
     protected void setOnEventListener(OnEvent event) {
         onEvent = event;
     }
@@ -74,6 +80,9 @@ public abstract class GameEntity {
         }
     }
 
+    /**
+     * @param type модель объекта
+     */
     protected void setType(EntityType type) {
         this.type = type;
         if (type.getPhaseCount() > 0) { // на случай, если нет ни одного кадра анимации
@@ -83,7 +92,10 @@ public abstract class GameEntity {
         }
     }
 
-    protected void applyType() {
+    /**
+     * применить кадр анимации
+     */
+    protected void animate() {
         if (type.getPhaseCount() > 1) { // не листаем кадры, если он всего 1
             int res = type.id[phase];
             image.setImageResource(res);
@@ -91,6 +103,9 @@ public abstract class GameEntity {
         }
     }
 
+    /**
+     * изменить счётчик кадров анимации
+     */
     protected void nextPhase() {
         phase_delay--;
         if (phase_delay < 0) {
@@ -99,15 +114,27 @@ public abstract class GameEntity {
         }
     }
 
-    protected void addEntityTo(ViewGroup frame) {
+    /**
+     * добавить картинку
+     * @param frame контейнер для виджета
+     */
+    protected void addEntityTo(@NonNull ViewGroup frame) {
         this.frame = frame;
         frame.addView(image);
     }
 
-    protected void removeEntity() { // удаляем картинку, и вместе с ней ссылку на объект (в теге)
+    /**
+     * удалить картинку и вместе с ней ссылку на объект (в теге)
+     */
+    protected void removeEntity() {
         frame.removeView(image);
     }
 
+    /**
+     * изменить размер картинки
+     * @param width ширина
+     * @param height высота
+     */
     protected void setSize(int width, int height) {
         FrameLayout.LayoutParams flp = (FrameLayout.LayoutParams) image.getLayoutParams();
         flp.width = (int) (width * dp);
@@ -115,10 +142,17 @@ public abstract class GameEntity {
         image.setLayoutParams(flp);
     }
 
+    /**
+     * @param speed - скорость текущего объекта
+     */
     public void setSpeed(int speed) {
         this.speed = speed;
     }
 
+    /**
+     * озвучка
+     * @param soundId номер звука из базового класса GameEntity
+     */
     protected void playSound(int soundId) {
         float curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -130,6 +164,10 @@ public abstract class GameEntity {
         streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
     }
 
+    /**
+     * стандартное движение по конвейеру
+     * и проверка на столкновение с игроком
+     */
     protected void move() {
         image.setTranslationX(image.getTranslationX() - speed);
         if (image.getTranslationX() < -image.getLayoutParams().width) {
@@ -138,8 +176,12 @@ public abstract class GameEntity {
         checkCollapse("player");
     }
 
+    /**
+     * сформировать сигнал о столкновении объектов
+     * @param tag тег игрока
+     */
     protected void checkCollapse(String tag) {
-        View player = (View) frame.findViewWithTag(tag); // ищем картинку игрока (он всего один)
+        View player = frame.findViewWithTag(tag); // ищем картинку игрока (он всего один)
         if (player != null) { // вдруг игрок удалён с экрана
             int playerH = player.getLayoutParams().height;
             int playerW = player.getLayoutParams().width;
@@ -154,6 +196,10 @@ public abstract class GameEntity {
         }
     }
 
+    /**
+     * результат столкновения
+     * @return зависит от реализации в потомке
+     */
     protected Events collapsed() {
         return null;
     }

@@ -14,8 +14,11 @@ public class PlayerEntity extends GameEntity {
         setType(EntityType.PLAYER_NORMAL);
     }
 
+    /** движение игрока
+     * реализуется только полёт в прыжке
+     */
     @Override
-    public void move() { // собственная реализация движения (не по конвейеру)
+    public void move() {
         if (fly) {
             if (jump_force != Const.MIN_FORCE) {
                 image.setTranslationY(image.getTranslationY() - jump_force);
@@ -29,6 +32,9 @@ public class PlayerEntity extends GameEntity {
         }
     }
 
+    /** прыжок
+     * страртовый импульс и озвучка
+     */
     public void jump() {
         if (!fly) {
             fly = true;

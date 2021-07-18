@@ -14,10 +14,6 @@ public class BonusEntity extends GameEntity {
         setType(EntityType.BONUS_NORMAL);
     }
 
-    protected void removeEntity() {
-        super.removeEntity();
-    }
-
     @Override
     protected Events collapsed() {
         return Events.COIN_CATCH;

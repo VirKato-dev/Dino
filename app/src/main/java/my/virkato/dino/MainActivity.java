@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     long score = 0;
     int score_delay = 0;
 
+    /**
+     * обработчик событий столкновения
+     */
     OnEvent event;
 
     @Override
@@ -41,26 +44,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        event = new OnEvent() { // действие по сигналу пришедшему по проводку
+        event = new OnEvent() {
             // не объект решает, что будет происходить в игре при столкновении с ним
             @Override
             public void action(ImageView img, Events event) {
-                // каждый (подключенный через проводок) объект присылает сигнал
                 GameEntity entity = (GameEntity)img.getTag();
-                if (event == Events.COIN_CATCH) {
-                    entity.playSound(GameEntity.COIN);
-                    entity.removeEntity();
-                    score += 10;
-                    t_score.setText(String.valueOf(score));
-                }
-                if (event == Events.ENEMY_COLLAPSE) {
-                    player.removeEntity();
-                    timer.cancel(); // прекращаем главный цикл игры
+                switch (event) {
+                    case COIN_CATCH:
+                        entity.playSound(GameEntity.COIN);
+                        entity.removeEntity();
+                        score += 10;
+                        t_score.setText(String.valueOf(score));
+                        break;
+                    case ENEMY_COLLAPSE:
+                        player.removeEntity();
+                        timer.cancel(); // прекращаем главный цикл игры
+                        break;
                 }
             }
         };
 
-        createPlayer();
+        player = createPlayer();
         mainLoop();
     }
 
@@ -70,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * добавление врагов на конвейер, их движение и подсчёт очков
+     */
     void mainLoop() {
         loop = new TimerTask() {
             @Override
@@ -77,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // отвечает за добавление врагов на конвейер, их движение и подсчёт очков
                         score_delay--;
                         if (score_delay < 0) {
                             score += 1;
@@ -90,17 +96,17 @@ public class MainActivity extends AppCompatActivity {
                         for (int i = n - 1; i > 0; i--) {
                             View view = l_frame.getChildAt(i);
                             Object tag = view.getTag();
-                            GameEntity entity;
+                            GameEntity entity = null;
                             if (tag != null) {
                                 // в окне могут быть и другие объекты
                                 if (tag instanceof GameEntity) { // нужны только теги игровых персонажей
                                     entity = (GameEntity) tag;
-                                    entity.applyType(); // смена картинки анимации
-                                    entity.move(); // передвигаем (у игрока своя реализация движения)
                                 } else if (tag instanceof String && tag.equals("player")) {
                                     entity = player;
-                                    entity.applyType(); // смена картинки анимации
-                                    entity.move(); // передвигаем
+                                }
+                                if (entity != null) {
+                                    entity.animate(); // смена картинки анимации
+                                    entity.move(); // у игрока своя реализация движения
                                 }
                             }
                         }
@@ -111,27 +117,32 @@ public class MainActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(loop, 0, Const.TIC);
     }
 
-    void createPlayer() {
-        // игрок всего один, поэтому храним его в отдельной переменной
-        player = new PlayerEntity(this);
+    /**
+     * игрок всего один, поэтому храним его в отдельной переменной
+     */
+    PlayerEntity createPlayer() {
+        PlayerEntity player = new PlayerEntity(this);
         player.addEntityTo(l_frame);
+        return player;
     }
 
+    /**
+     * объектов столкновения много и храним их в теге картинки
+     */
     void createEnemy() {
-        // объектов столкновения много и храним их в теге картинки
         Random random = new Random();
         if (random.nextBoolean()) { // орёл или решка - всего 2 объекта пока)
             EnemyEntity enemy;
             enemy = new EnemyEntity(this);
             enemy.setSpeed(5);
             enemy.addEntityTo(l_frame);
-            enemy.setOnEventListener(event); // подключаем проводок к этому объекту
+            enemy.setOnEventListener(event);
         } else {
             BonusEntity bonus;
             bonus = new BonusEntity(this);
             bonus.setSpeed(5);
             bonus.addEntityTo(l_frame);
-            bonus.setOnEventListener(event); // подключаем проводок к этому объекту
+            bonus.setOnEventListener(event);
         }
         delay = 200; // позже усложнить
     }
