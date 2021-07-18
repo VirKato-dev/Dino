@@ -9,13 +9,13 @@ public class PlayerEntity extends GameEntity {
 
     public PlayerEntity(Context context) {
         super(context);
-        setSize(80,80);
+        setSize(64,96);
         image.setTag("player");
         setType(EntityType.PLAYER_NORMAL);
     }
 
-    /** движение игрока
-     * реализуется только полёт в прыжке
+    /**
+     * движение игрока - только полёт в прыжке
      */
     @Override
     public void move() {
@@ -32,8 +32,8 @@ public class PlayerEntity extends GameEntity {
         }
     }
 
-    /** прыжок
-     * страртовый импульс и озвучка
+    /**
+     * стартовый импульс прыжка и озвучка
      */
     public void jump() {
         if (!fly) {

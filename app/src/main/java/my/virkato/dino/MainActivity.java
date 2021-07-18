@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
                             t_score.setText(String.valueOf(score));
                             score_delay = Const.SCORE_DELAY;
                         }
-                        addNewEntity(); // ставим нового противника на конвейер
+
+                        addNewEntity();
 
                         int n = l_frame.getChildCount();
                         for (int i = n - 1; i > 0; i--) {
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                                     entity = player;
                                 }
                                 if (entity != null) {
-                                    entity.animate(); // смена картинки анимации
+                                    entity.animate();
                                     entity.move(); // у игрока своя реализация движения
                                 }
                             }
@@ -147,6 +148,9 @@ public class MainActivity extends AppCompatActivity {
         delay = 200; // позже усложнить
     }
 
+    /**
+     * добавить новый объект на конвейер
+     */
     void addNewEntity() {
         if (delay < 0) {
             createEnemy();

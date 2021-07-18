@@ -4,7 +4,7 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Build;
+//import android.os.Build;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -58,8 +58,8 @@ public abstract class GameEntity {
     }
 
     void initAudio() {
-        if (soundPool == null) { // один раз для всего приложения
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (soundPool == null) { // один раз для всех объектов
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_GAME)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -68,16 +68,15 @@ public abstract class GameEntity {
                         .setMaxStreams(4)
                         .setAudioAttributes(audioAttributes)
                         .build();
-            } else {
-                soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
+//            } else {
+//                soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
             }
 
             // Не стоит ждать окончания загрузки
             COIN = soundPool.load(context, R.raw.coin, 0);
             JUMP = soundPool.load(context, R.raw.jump, 0);
-
             audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        }
+//        }
     }
 
     /**
@@ -132,7 +131,7 @@ public abstract class GameEntity {
 
     /**
      * изменить размер картинки
-     * @param width ширина
+     * @param width  ширина
      * @param height высота
      */
     protected void setSize(int width, int height) {
@@ -143,7 +142,7 @@ public abstract class GameEntity {
     }
 
     /**
-     * @param speed - скорость текущего объекта
+     * @param speed скорость текущего объекта
      */
     public void setSpeed(int speed) {
         this.speed = speed;
@@ -183,13 +182,19 @@ public abstract class GameEntity {
     protected void checkCollapse(String tag) {
         View player = frame.findViewWithTag(tag); // ищем картинку игрока (он всего один)
         if (player != null) { // вдруг игрок удалён с экрана
-            int playerH = player.getLayoutParams().height;
-            int playerW = player.getLayoutParams().width;
-            int thisH = image.getLayoutParams().height;
-            int thisW = image.getLayoutParams().width;
-            if (image.getTranslationX() < playerW && image.getTranslationX() + thisW > 0) {
-                if (thisH + image.getTranslationY() <= playerH + player.getTranslationY() &&
-                        image.getTranslationY() >= player.getTranslationY()) { // столкновение
+            int pH = player.getLayoutParams().height;
+            int pW = player.getLayoutParams().width;
+            int pTX = (int)player.getTranslationX();
+            int pTY = (int)player.getTranslationY();
+            int tH = image.getLayoutParams().height;
+            int tW = image.getLayoutParams().width;
+            int tTX = (int)image.getTranslationX();
+            int tTY = (int)image.getTranslationY();
+            int padX = (int) (10 * dp);
+            int padY = (int) (10 * dp);
+
+            if (tTX + padX < pTX + pW && tTX + tW > pTX - padX) {
+                if (tTY + padY < pTY + pH && tTY + tH > pTY - padY) { // столкновение
                     onEvent.action(image, collapsed()); // результат проверки столкновения передаём по проводку приёмнику
                 }
             }
