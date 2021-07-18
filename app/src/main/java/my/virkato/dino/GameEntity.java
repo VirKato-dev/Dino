@@ -72,6 +72,7 @@ public abstract class GameEntity {
 //                soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
             }
 
+
             // Не стоит ждать окончания загрузки
             COIN = soundPool.load(context, R.raw.coin, 0);
             JUMP = soundPool.load(context, R.raw.jump, 0);
@@ -153,14 +154,14 @@ public abstract class GameEntity {
      * @param soundId номер звука из базового класса GameEntity
      */
     protected void playSound(int soundId) {
-        float curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        float maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        float leftVolume = curVolume / maxVolume;
-        float rightVolume = curVolume / maxVolume;
-        int priority = 0;
-        int no_loop = 0;
-        float normal_playback_rate = 1f;
-        streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
+//        float maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+//        float curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//        float leftVolume = curVolume / maxVolume;
+//        float rightVolume = curVolume / maxVolume;
+//        int priority = 0;
+//        int no_loop = 0;
+//        float normal_playback_rate = 1f;
+//        streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
     }
 
     /**

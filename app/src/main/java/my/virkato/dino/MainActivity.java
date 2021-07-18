@@ -135,17 +135,19 @@ public class MainActivity extends AppCompatActivity {
         if (random.nextBoolean()) { // орёл или решка - всего 2 объекта пока)
             EnemyEntity enemy;
             enemy = new EnemyEntity(this);
-            enemy.setSpeed(5);
+            enemy.setSpeed(9);
             enemy.addEntityTo(l_frame);
             enemy.setOnEventListener(event);
+            delay = 10 * random.nextInt(10) + 100;
         } else {
             BonusEntity bonus;
             bonus = new BonusEntity(this);
-            bonus.setSpeed(5);
+            bonus.setSpeed(9);
             bonus.addEntityTo(l_frame);
             bonus.setOnEventListener(event);
+            delay = 10 * random.nextInt(10);
         }
-        delay = 200; // позже усложнить
+        //delay = 10 * random.nextInt(10) + 100; // позже усложнить
     }
 
     /**
