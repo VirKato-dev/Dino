@@ -61,8 +61,8 @@ public abstract class GameEntity {
         if (soundPool == null) { // один раз для всех объектов
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_GAME)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .build();
                 soundPool = new SoundPool.Builder()
                         .setMaxStreams(4)
@@ -154,14 +154,14 @@ public abstract class GameEntity {
      * @param soundId номер звука из базового класса GameEntity
      */
     protected void playSound(int soundId) {
-//        float maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-//        float curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-//        float leftVolume = curVolume / maxVolume;
-//        float rightVolume = curVolume / maxVolume;
-//        int priority = 0;
-//        int no_loop = 0;
-//        float normal_playback_rate = 1f;
-//        streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
+        float maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        float curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        float leftVolume = curVolume / maxVolume;
+        float rightVolume = curVolume / maxVolume;
+        int priority = 0;
+        int no_loop = 0;
+        float normal_playback_rate = 1f;
+        streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
     }
 
     /**

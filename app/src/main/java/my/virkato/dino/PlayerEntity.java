@@ -37,9 +37,9 @@ public class PlayerEntity extends GameEntity {
      */
     public void jump() {
         if (!fly) {
-            fly = true;
-            jump_force = Const.JUMP_FORCE;
             playSound(JUMP);
+            jump_force = Const.JUMP_FORCE;
+            fly = true;
         }
     }
 
