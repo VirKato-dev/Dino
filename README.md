@@ -8,7 +8,7 @@ Concept only (right now)
 
 MainActivity - main loop
 
-GameEntity - generic class for the game entities
+GameEntity - general class for the game entities
 
 Const, Events - some constants
 
