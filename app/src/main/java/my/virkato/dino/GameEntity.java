@@ -61,8 +61,9 @@ public abstract class GameEntity {
         if (soundPool == null) { // один раз для всех объектов
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_GAME)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setFlags(AudioAttributes.FLAG_HW_AV_SYNC) // важный флаг для избавления от лага перед воспроизведением
                         .build();
                 soundPool = new SoundPool.Builder()
                         .setMaxStreams(4)
@@ -74,8 +75,8 @@ public abstract class GameEntity {
 
 
             // Не стоит ждать окончания загрузки
-            COIN = soundPool.load(context, R.raw.coin, 0);
-            JUMP = soundPool.load(context, R.raw.jump, 0);
+            COIN = soundPool.load(context, R.raw.coin, 1);
+            JUMP = soundPool.load(context, R.raw.jump, 1);
             audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 //        }
     }
@@ -158,7 +159,7 @@ public abstract class GameEntity {
         float curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float leftVolume = curVolume / maxVolume;
         float rightVolume = curVolume / maxVolume;
-        int priority = 0;
+        int priority = 1;
         int no_loop = 0;
         float normal_playback_rate = 1f;
         streamId = soundPool.play(soundId, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
